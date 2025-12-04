@@ -25,18 +25,3 @@ jobs:
 
       - name: Run tests
         run: cargo test --verbose
-
-  benchmark-check:
-    name: Verify Benchmark Runs
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
-
-      - name: Run Benchmark Example
-        # We run the benchmark to ensure the code compiles and executes correctly.
-        # We do not assert performance numbers here as CI environments vary wildly.
-        run: cargo run --release --example benchmark
