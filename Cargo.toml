@@ -1,0 +1,32 @@
+[package]
+name = "bloomsrv"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# The specific library requested.
+# Note: bloomlib itself handles raw bits and hashing but is not a generic struct by default.
+bloomlib = "0.1.3"
+
+# Web Framework for the REST API
+# Axum is chosen for its ergonomics and integration with Tokio.
+axum = "0.7"
+
+# The Async Runtime required by Axum
+tokio = { version = "1.0", features = ["full"] }
+
+# Serialization/Deserialization for JSON bodies
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# UUIDs for unique filter identification
+uuid = { version = "1.0", features = ["v4", "serde"] }
+
+# Parking Lot provides faster, smaller locks than the standard library
+parking_lot = "0.12"
+
+[dev-dependencies]
+tokio = { version = "1", features = ["full"] }
+tower = { version = "0.4", features = ["util"] }
+http-body-util = "0.1"
+serde_json = "1.0"
