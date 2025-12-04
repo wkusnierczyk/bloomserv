@@ -466,6 +466,5 @@ _Example_
 ```json
 {
   "message": "Filter 'login_attempts' has been deleted"
-}```
-
-
+}
+```
