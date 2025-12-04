@@ -11,7 +11,7 @@ env:
 
 jobs:
   test:
-    name: Run Unit Tests
+    name: Run Unit and Integration Tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
