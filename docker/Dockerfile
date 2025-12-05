@@ -17,7 +17,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Install the crate from crates.io
 # We use --root /usr/local so the binary ends up in /usr/local/bin
-RUN cargo install ${CRATE_NAME} --root /usr/local
+#RUN cargo install ${CRATE_NAME} --root /usr/local
+COPY . .
+RUN cargo install --path . --root /usr/local
 
 # STAGE 2: Runtime
 # We use a lightweight Debian slim image for the final container.
@@ -49,8 +51,7 @@ EXPOSE 3000
 # Rust services often default to 127.0.0.1, which is unreachable from outside Docker.
 # We set common environment variables to force listening on 0.0.0.0.
 ENV HOST=0.0.0.0
-ENV ADDRESS=0.0.0.0
-ENV ROCKET_ADDRESS=0.0.0.0
+ENV PORT=3000
 
 # Run the service
-CMD ["service"]
+CMD ["service", "--host", "0.0.0.0", "--port", "3000"]

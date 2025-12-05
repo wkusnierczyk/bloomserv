@@ -1,19 +1,33 @@
-// src/main.rs
-use std::net::SocketAddr;
+use clap::Parser;
+use std::net::{IpAddr, SocketAddr};
 // Use the logic from lib.rs
-// If your Cargo.toml name is "bloom_daemon", use that here.
+// Assuming your library crate is named "bloomsrv" in Cargo.toml
 use bloomsrv::{create_app, SharedState};
+
+/// Simple Bloom Filter Daemon
+#[derive(Parser, Debug)]
+#[command(author, version, about, long_about = None)]
+struct Args {
+    /// Host to listen on
+    #[arg(long, env = "HOST", default_value = "127.0.0.1")]
+    host: IpAddr,
+
+    /// Port to listen on
+    #[arg(short, long, env = "PORT", default_value_t = 3000)]
+    port: u16,
+}
 
 #[tokio::main]
 async fn main() {
+    // Parse command line arguments (and environment variables)
+    let args = Args::parse();
+
     let state = SharedState::default();
 
     // We use the public function from lib.rs
     let app = create_app(state);
 
-    let host = [127, 0, 0, 1];
-    let port = 3000;
-    let addr = SocketAddr::from((host, port));
+    let addr = SocketAddr::from((args.host, args.port));
     println!("Bloom Daemon listening on http://{}", addr);
 
     let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
