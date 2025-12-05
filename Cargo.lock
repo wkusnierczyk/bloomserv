@@ -138,7 +138,7 @@ checksum = "433363065e73efc617d42e2f2a06a395183d6d417db0da402104af440468a95d"
 
 [[package]]
 name = "bloomsrv"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "axum",
  "bloomlib",

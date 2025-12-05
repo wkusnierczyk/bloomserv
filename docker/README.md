@@ -2,6 +2,16 @@
 
 This project contains a `Dockerfile` to build a Docker image encapsulating the `bloomsrv` service and expose it in a running container.
 
+## Contents
+
+* [Prerequisites](#prerequisites)
+* [Build the image](#build-the-image)
+* [Run the container](#run-the-container)
+* [Stop the container](#stop-the-container)
+* [Clean up](#clean-up)
+* [Print logs](#print-logs)
+* [Testing](#testing)
+
 ## Prerequisites
 
 * [Docker](https://www.docker.com/): to build and run the container.
@@ -111,3 +121,6 @@ docker logs -f "${SERVICE_NAME}"  # print and listen for further updates
 make logs                         # print and listen for further updates (-f implied)
 ```
 
+## Testing
+
+No testing is provided for the Docker image.
