@@ -1,43 +1,113 @@
-Bloom Service Docker Container
+# `bloomsrv` Docker container
 
-This project contains a Dockerfile to install and run the bloomsrv crate from crates.io.
+This project contains a `Dockerfile` to build a Docker image encapsulating the `bloomsrv` service and expose it in a running container.
 
-Prerequisites
+## Prerequisites
 
-Docker installed on your machine.
+* [Docker](https://www.docker.com/): to build and run the container.
+* [Make](https://www.gnu.org/software/make/): to use build system commands instead of invoking docker commands manually. 
 
-Build the Image
+The included `Makefile` provides targets to build, run, stop, and clean up the container, with suitable deafaults.
+To customize the build process, override the build arguments in the `Makefile` while executing `make`. 
 
-Run the following command in the directory containing the Dockerfile:
-
-docker build -t bloomsrv-image .
-
-
-Note: If the crate bloomsrv does not exist on crates.io (e.g. if it was a typo for bloom-server), the build step RUN cargo install... will fail. You can override the crate name using build arguments:
-
-# Example: Building for 'bloom-server' instead
-docker build --build-arg CRATE_NAME=bloom-server -t bloomsrv-image .
+**Note**
+* Check the `Makefile` for more details.
+No detailed documentation on customizing the `make` build is provided as of this version; further will be provided at a later time.
 
 
-Run the Container
+## Build the image
 
-Once built, you can run the service. You will likely need to map the exposed port to your host machine.
+Run the following commands in the directory containing the Dockerfile.
 
-# Replace 8080 with the specific port the application listens on
-docker run -p 8080:8080 --name my-bloom-service bloomsrv-image
+```bash
+# Specify the image name
+export IMAGE_NAME="bloomsrv"
 
+# Option 1: Use docker
+docker build -t "${IMAGE_NAME}" .
 
-Environment Variables
+# Option 2: Use make
+make clean build
+```
 
-If the service requires configuration via environment variables (common for Rust services), pass them using the -e flag:
+**Note**
+* By default, the service will listen on `http://127.0.0.1:3000`.
+* To override the settings, set the build arguments `BLOOMSRV_HOST` and `BLOOMSRV_PORT`.
 
-docker run -p 8080:8080 -e RUST_LOG=info -e HOST=0.0.0.0 bloomsrv-image
+```bash
+# Specify the host and port to listen on
+export BLOOMSRV_HOST=<host>
+export BLOOMSRV_PORT=<port>
 
+# Option 1: Use docker
+docker build -t "${IMAGE_NAME}" \
+             --build-arg BLOOMSRV_HOST="${BLOOMSRV_HOST}" \ 
+             --build-arg BLOOMSRV_PORT="${BLOOMSRV_PORT}" \
+             .
+```
 
-Troubleshooting
+## Run the container
 
-Crate Not Found: If cargo install bloomsrv fails, verify the exact crate name on crates.io.
+Run the following commands to start the container.
 
-Binary Name Mismatch: If the crate name is bloomsrv but the executable binary it installs has a different name, you may need to adjust the COPY command in the Dockerfile to point to the correct binary name in /usr/local/bin/.
+**Note**
+* If the image has not been built locally, as in the preceding step, an attempt will be made to pull the image will be pulled from Docker Hub instead.
 
-Missing Dependencies: If the container starts but crashes immediately with "library not found" errors, the binary might be dynamically linking to system libraries missing in debian:bookworm-slim. You may need to add packages (like libpq5, libsqlite3-0, etc.) to the apt-get install block in the Runtime stage.
+```bash
+# Specify the port mapping
+# This is the port bloomsrv listens on within the container; 
+# must match the value of BLOOMSRV_PORT used in the build step
+export CONTAINER_PORT=<port>
+# This is the port the host listens on for traffic to the container  
+export HOST_PORT=<port>
+
+# Specify the name for the running container
+export SERVICE_NAME="bloomsrv"
+
+# Option 1: Use docker
+docker run -p "${HOST_PORT}":"${CONTAINER_PORT}" \
+           --name "${SERVICE_NAME}" \
+           "${IMAGE_NAME}"
+           
+# Option 2: Use make
+make run
+```
+
+## Stop the container
+
+Use the following commands to stop the container.
+
+```bash
+# Option 1: Use docker
+docker stop "${SERVICE_NAME}"
+docker rm "${SERVICE_NAME}"
+
+# Option 2: Use make
+make stop
+```
+
+## Clean up
+
+Use the following commands to remove the image.
+
+```bash
+# Option 1: Use docker
+docker rmi "${IMAGE_NAME}"
+
+# Option 2: Use make
+make clean
+```
+
+## Print logs
+
+Use the follwoing commands to print the logs of a running container.
+
+```bash
+# Option 1: Use docker
+docker logs "${SERVICE_NAME}"     # just print the logs
+docker logs -f "${SERVICE_NAME}"  # print and listen for further updates
+
+# Option 2: Use make
+make logs                         # print and listen for further updates (-f implied)
+```
+
