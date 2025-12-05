@@ -12,11 +12,11 @@ const DEFAULT_PORT: u16 = 3000;
 #[command(author, version, about, long_about = None)]
 struct Args {
     /// Host to listen on
-    #[arg(long, env = "HOST", default_value = DEFAULT_HOST)]
+    #[arg(long, env = "BLOOMSRV_HOST", default_value = DEFAULT_HOST)]
     host: IpAddr,
 
     /// Port to listen on
-    #[arg(short, long, env = "PORT", default_value_t = DEFAULT_PORT)]
+    #[arg(short, long, env = "BLOOMSRV_PORT", default_value_t = DEFAULT_PORT)]
     port: u16,
 }
 
