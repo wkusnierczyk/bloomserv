@@ -4,16 +4,19 @@ use std::net::{IpAddr, SocketAddr};
 // Assuming your library crate is named "bloomsrv" in Cargo.toml
 use bloomsrv::{create_app, SharedState};
 
+const DEFAULT_HOST: &str = "127.0.0.1";
+const DEFAULT_PORT: u16 = 3000;
+
 /// Simple Bloom Filter Daemon
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
 struct Args {
     /// Host to listen on
-    #[arg(long, env = "HOST", default_value = "127.0.0.1")]
+    #[arg(long, env = "HOST", default_value = DEFAULT_HOST)]
     host: IpAddr,
 
     /// Port to listen on
-    #[arg(short, long, env = "PORT", default_value_t = 3000)]
+    #[arg(short, long, env = "PORT", default_value_t = DEFAULT_PORT)]
     port: u16,
 }
 
