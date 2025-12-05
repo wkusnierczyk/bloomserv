@@ -13,6 +13,7 @@ This service is ideal for distributed systems that need a lightweight, fast, and
 - [Building and Testing](#building-and-testing)
 - [Running the Service](#running-the-service)
 - [API Usage Guide](#api-usage-guide)
+- [Docker](#docker)
 
 ---
 
@@ -497,3 +498,9 @@ _Example_
   "message": "Filter 'login_attempts' has been deleted"
 }
 ```
+
+## Docker
+
+The `docker/` subdirectory provides code to build a Docker image encapsulating the service.
+The compiled image is available from Docker Hub as [`wkusnierczyk/bloomsrv`](https://hub.docker.com/r/wkusnierczyk/bloomsrv).
+See `docker/README.md` for more details.
