@@ -17,9 +17,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Install the crate from crates.io
 # We use --root /usr/local so the binary ends up in /usr/local/bin
-#RUN cargo install ${CRATE_NAME} --root /usr/local
-COPY . .
-RUN cargo install --path . --root /usr/local
+RUN cargo install ${CRATE_NAME} --root /usr/local
 
 # STAGE 2: Runtime
 # We use a lightweight Debian slim image for the final container.
