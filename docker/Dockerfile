@@ -45,13 +45,16 @@ RUN useradd -m -u 1000 -U bloomsrv
 USER bloomsrv
 WORKDIR /home/bloomsrv
 
+ARG SERVICE_HOST=0.0.0.0
+ARG SERVICE_PORT=3000
+
 # Expose the service port.
-EXPOSE 3000
+EXPOSE ${SERVICE_PORT}
 
 # Rust services often default to 127.0.0.1, which is unreachable from outside Docker.
 # We set common environment variables to force listening on 0.0.0.0.
-ENV HOST=0.0.0.0
-ENV PORT=3000
+ENV HOST=${SERVICE_HOST}
+ENV PORT=${SERVICE_PORT}
 
 # Run the service
-CMD ["service", "--host", "0.0.0.0", "--port", "3000"]
+CMD ["service", "--host", "${SERVICE_HOST}", "--port", "${SERVICE_PORT}"]
